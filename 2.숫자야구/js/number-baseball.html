@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>숫자야구 stduy</title>
+  </head>
+  <body>
+    <form>
+      <input type="text" />
+      <button>확인</button>
+    </form>
+    <ul></ul>
+  </body>
+  <script>
+    const $form = document.querySelector("form");
+    const $input = document.querySelector("input");
+    const $ul = document.querySelector("ul");
+    const answer = [];
+    const candiate = [];
+    const tryArr = [];
+    let value;
+    let tries = 0;
+
+    for (let i = 1; i < 10; i++) {
+      candiate.push(i);
+    }
+
+    while (candiate.length > 5) {
+      const randomNum = Math.random() * candiate.length;
+      if (randomNum > 0) {
+        answer.push(candiate.splice(randomNum, 1)[0]);
+      }
+    }
+
+    console.log("정답", answer);
+
+    $input.addEventListener("input", (e) => {
+      value = e.target.value;
+    });
+
+    $form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      if (value.length === 4 && Number(value)) {
+        const submit = Array.from(value);
+        const set = new Set(value);
+        let strike = 0;
+        let ball = 0;
+
+        if (set.size === 4 && !tryArr.includes(value)) {
+          tryArr.push(value);
+          for (let i = 0; i < 4; i++) {
+            const tempNum = answer[i];
+            for (let j = 0; j < 4; j++) {
+              if (i === j && tempNum === Number(value[j])) {
+                strike += 1;
+              } else if (tempNum === Number(value[j])) {
+                ball += 1;
+              }
+            }
+          }
+
+          tries += 1;
+
+          const $li = document.createElement("li");
+          if (strike === 4 && tries <= 10) {
+            $li.innerText = `정답`;
+          } else if (tries < 10) {
+            $li.innerText = `${value}: ${strike} 스트라이크 ${ball} 볼`;
+          } else if (tries >= 10) {
+            $li.innerHTML = `정답은 ${answer}, 실패`;
+          }
+          $ul.appendChild($li);
+          console.log("제출", value);
+        } else if (set.size < 4) {
+          alert("숫자가 중복 되었습니다");
+        } else if (tryArr.includes(value)) {
+          alert("이미 시도한 값입니다");
+        }
+      } else {
+        alert("올바른 형식이 아닙니다");
+      }
+
+      value = "";
+      $input.value = "";
+      $input.focus();
+    });
+  </script>
+</html>

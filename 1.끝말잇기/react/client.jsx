@@ -1,7 +1,7 @@
 const React = require("react");
 const ReactDom = require("react-dom/client");
 
-const WordRelay = require("./WordRelayClass");
+const WordRelay = require("./WordRelay");
 
 const rootNode = document.getElementById("root");
 
