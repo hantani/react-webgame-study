@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>가위바위보 study</title>
+    <style>
+      #computer {
+        width: 142px;
+        height: 200px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="computer"></div>
+    <div>
+      <button id="scissors" class="btn">가위</button>
+      <button id="rock" class="btn">바위</button>
+      <button id="paper" class="btn">보</button>
+    </div>
+    <div id="score">0</div>
+    <script>
+      const $computer = document.querySelector("#computer");
+      let id;
+      const $sciBtn = document.querySelector("#scissors");
+      const $rockBtn = document.querySelector("#rock");
+      const $paperBtn = document.querySelector("#paper");
+      const $score = document.querySelector("#score");
+      let currentNum = parseInt($score.innerText);
+
+      const rspX = {
+        scissors: "0", // 가위
+        rock: "-220px", // 바위
+        paper: "-440px", // 보
+      };
+
+      const computerFn = () => {
+        if ($computer.className === "scissors") {
+          $computer.classList.remove("scissors");
+          $computer.classList.add("rock");
+          $computer.style.background = `url(./rsp.png) ${rspX.scissors} 0px / auto 200px`;
+        } else if ($computer.className === "rock") {
+          $computer.classList.remove("rock");
+          $computer.classList.add("paper");
+          $computer.style.background = `url(./rsp.png) ${rspX.rock} 0px / auto 200px`;
+        } else if ($computer.className === "paper") {
+          $computer.classList.remove("paper");
+          $computer.classList.add("scissors");
+          $computer.style.background = `url(./rsp.png) ${rspX.paper} 0px / auto 200px`;
+        }
+      };
+
+      $computer.style.background = `url(./rsp.png) ${rspX.scissors} 0px / auto 200px`;
+      $computer.classList.add("scissors");
+
+      id = setInterval(() => {
+        computerFn();
+      }, 100);
+
+      const win = () => {
+        currentNum += 1;
+        $score.innerText = currentNum;
+      };
+
+      const lose = () => {
+        currentNum -= 1;
+        $score.innerText = currentNum;
+      };
+
+      const clickHand = (e) => {
+        const userHand = e.target.id;
+        const computerHand = $computer.className;
+        console.log(userHand, computerHand);
+
+        if (userHand === computerHand) {
+          return;
+        } else {
+          clearInterval(id);
+          if (userHand === "scissors" && computerHand === "rock") {
+            lose();
+          } else if (userHand === "scissors" && computerHand === "paper") {
+            win();
+          } else if (userHand === "rock" && computerHand === "paper") {
+            lose();
+          } else if (userHand === "rock" && computerHand === "scissors") {
+            win();
+          } else if (userHand === "paper" && computerHand === "scissors") {
+            lose();
+          } else if (userHand === "paper" && computerHand === "rock") {
+            win();
+          }
+        }
+
+        setTimeout(() => {
+          id = setInterval(() => {
+            computerFn();
+          }, 100);
+        }, 500);
+      };
+
+      $sciBtn.addEventListener("click", clickHand);
+      $rockBtn.addEventListener("click", clickHand);
+      $paperBtn.addEventListener("click", clickHand);
+    </script>
+  </body>
+</html>
